@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
-
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import { I18nProvider } from "@/providers/i18n-provider";
+import { notFound } from "next/navigation";
+import { locales } from "@/i18n";
 
 export const metadata: Metadata = {
   title: "Puntos de Donación DANA Valencia",
@@ -23,14 +23,22 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.svg" }],
 };
 
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  params: { locale },
+}: {
+  children: React.ReactNode;
+  params: { locale: string };
+}) {
+  if (!locales.includes(locale as any)) notFound();
+
   return (
-    <html lang="es" className={`${GeistSans.variable}`}>
-      <body>
-        <I18nProvider>{children}</I18nProvider>
-      </body>
+    <html lang={locale} className={`${GeistSans.variable}`}>
+      <body>{children}</body>
     </html>
   );
-}
+} 

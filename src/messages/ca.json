@@ -1,0 +1,54 @@
+{
+  "welcome": {
+    "title": "Benvingut/da als Punts d'Ajuda DANA!",
+    "description": "Aquest mapa interactiu mostra tots els punts de recollida de donacions per ajudar a les persones afectades per la DANA a València.",
+    "markerInfo": "Cada marcador al mapa representa un punt on pots portar les teues donacions. En fer clic en ells, podràs veure:",
+    "features": {
+      "address": "Adreça exacta del punt de recollida",
+      "items": "Tipus de donacions que accepten",
+      "schedule": "Horaris de recepció",
+      "contact": "Informació de contacte"
+    },
+    "filterTip": "Utilitza els filtres per trobar els punts més propers a tu o per buscar llocs que accepten donacions específiques.",
+    "understood": "Entés"
+  },
+  "filters": {
+    "title": "Filtres",
+    "close": "Tancar filtres",
+    "location": {
+      "community": "Comunitat Autònoma",
+      "province": "Província",
+      "city": "Municipi",
+      "all": "Totes",
+      "allM": "Tots",
+      "acceptedItems": "Items Acceptats"
+    },
+    "items": {
+      "title": "Items Acceptats",
+      "types": {
+        "FOOD": "Aliments",
+        "CLOTHING": "Roba",
+        "HYGIENE": "Productes d'Higiene",
+        "CLEANING": "Productes de Neteja",
+        "MEDICINE": "Medicaments",
+        "TOOLS": "Ferramentes",
+        "OTHER": "Altres"
+      }
+    }
+  },
+  "location": {
+    "contact": {
+      "phone": "Telèfon",
+      "email": "Correu electrònic",
+      "schedule": "Horari",
+      "viewOnMaps": "Veure en Google Maps"
+    },
+    "items": {
+      "title": "Accepta"
+    }
+  },
+  "common": {
+    "loading": "Carregant...",
+    "openSource": "Projecte Open Source"
+  }
+}

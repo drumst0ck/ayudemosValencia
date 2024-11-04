@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import { type Community, type LocationFilters } from "@/types/locations";
 import territoriesData from "@/arbol.json";
 import { ACCEPTED_ITEMS } from "@/constants/items";
-import { MapPin, Building2, Building, Package } from "lucide-react";
+import { MapPin, Building2, Building, Package, Languages, Globe2 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useRouter, usePathname } from "next/navigation";
+import { locales } from "@/i18n";
 
 // Función para generar IDs únicos
 const generateUniqueId = () => {
@@ -26,6 +29,9 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
   );
   const [selectedTown, setSelectedTown] = useState<string>("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const t = useTranslations();
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Cargar localizaciones iniciales
   useEffect(() => {
@@ -106,26 +112,59 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
     });
   };
 
+  const handleLanguageChange = (newLocale: string) => {
+    const currentPath = pathname.split('/').slice(2).join('/');
+    router.push(`/${newLocale}/${currentPath}`);
+  };
 
   return (
     <div className="flex h-full flex-col">
       <div className="flex-1 space-y-6">
+        {/* Selector de idioma */}
+        <div className="flex items-center justify-between gap-4 border-b border-gray-200 pb-4">
+          <div className="flex items-center gap-2">
+            <Globe2 className="h-4 w-4 text-gray-500" />
+            <span className="text-sm font-medium text-gray-700">Idioma</span>
+          </div>
+          <div className="flex gap-2">
+            {[
+              { code: "es", label: "ES" },
+              { code: "ca", label: "VA" },
+            ].map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang.code)}
+                className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
+                  pathname.split('/')[1] === lang.code
+                    ? "bg-teal-100 text-teal-700"
+                    : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                }`}
+                aria-label={`Cambiar a ${lang.code === "es" ? "Español" : "Valencià"}`}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-800">Filtros</h3>
+          <h3 className="text-xl font-semibold text-gray-800">
+            {t("filters.title")}
+          </h3>
           
           <div className="space-y-4">
             {/* Comunidad Autónoma */}
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Building2 className="h-4 w-4" />
-                Comunidad Autónoma
+                {t("filters.location.community")}
               </label>
               <select
                 value={selectedCommunity}
                 onChange={(e) => handleCommunityChange(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 bg-white p-2.5 shadow-sm transition hover:border-teal-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
               >
-                <option value="">Todas</option>
+                <option value="">{t("filters.location.all")}</option>
                 {communities.map((community) => (
                   <option key={community.code} value={community.label}>
                     {community.label}
@@ -138,7 +177,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Building className="h-4 w-4" />
-                Provincia
+                {t("filters.location.province")}
               </label>
               <select
                 value={selectedProvince}
@@ -146,7 +185,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
                 className="w-full rounded-lg border border-gray-300 bg-white p-2.5 shadow-sm transition hover:border-teal-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 disabled:bg-gray-100 disabled:opacity-50"
                 disabled={!selectedCommunity}
               >
-                <option value="">Todas</option>
+                <option value="">{t("filters.location.all")}</option>
                 {provinces.map((province) => (
                   <option key={province.code} value={province.label}>
                     {province.label}
@@ -159,7 +198,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <MapPin className="h-4 w-4" />
-                Municipio
+                {t("filters.location.city")}
               </label>
               <select
                 value={selectedTown}
@@ -167,7 +206,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
                 className="w-full rounded-lg border border-gray-300 bg-white p-2.5 shadow-sm transition hover:border-teal-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 disabled:bg-gray-100 disabled:opacity-50"
                 disabled={!selectedProvince}
               >
-                <option value="">Todos</option>
+                <option value="">{t("filters.location.all")}</option>
                 {towns.map((town) => (
                   <option key={town.code} value={town.label}>
                     {town.label}
@@ -180,7 +219,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
             <div className="space-y-3">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <Package className="h-4 w-4" />
-                Items Aceptados
+                {t("filters.location.acceptedItems")}
               </label>
               <div className="grid grid-cols-2 gap-3">
                 {Object.entries(ACCEPTED_ITEMS).map(([value, label]) => (
@@ -203,7 +242,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
         </div>
       </div>
 
-      {/* Footer con enlace al repositorio */}
+      {/* Footer */}
       <div className="mt-6 border-t border-gray-200 pt-4">
         <a
           href="https://github.com/tu-usuario/tu-repo"
@@ -225,7 +264,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
           >
             <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
           </svg>
-          Proyecto Open Source
+          {t("common.openSource")}
         </a>
       </div>
     </div>

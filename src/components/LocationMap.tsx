@@ -10,6 +10,7 @@ import "leaflet.markercluster";
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import { Phone, Mail, Clock, MapPin, Info } from 'lucide-react';
+import { useTranslations } from "next-intl";
 
 type LocationMapProps = {
   locations: Location[];
@@ -60,6 +61,7 @@ const createClusterCustomIcon = (cluster: L.MarkerCluster) => {
 };
 
 export function LocationMap({ locations }: LocationMapProps) {
+  const t = useTranslations();
   const center = { lat: 40.4167, lng: -3.7037 };
   const zoom = 6;
 
@@ -144,7 +146,7 @@ export function LocationMap({ locations }: LocationMapProps) {
                         href={`tel:${location.phone}`}
                         className="flex-1 text-teal-600 hover:underline"
                       >
-                        {location.phone}
+                        {t("location.contact.phone")}: {location.phone}
                       </a>
                     </div>
                   )}
@@ -155,28 +157,30 @@ export function LocationMap({ locations }: LocationMapProps) {
                         href={`mailto:${location.email}`}
                         className="flex-1 text-teal-600 hover:underline"
                       >
-                        {location.email}
+                        {t("location.contact.email")}: {location.email}
                       </a>
                     </div>
                   )}
                   {location.schedule && location.schedule.trim() !== "" && (
                     <div className="flex items-center gap-1.5 text-sm">
                       <Clock className="h-4 w-4 flex-shrink-0 text-gray-500" />
-                      <p className="flex-1 text-gray-600">{location.schedule}</p>
+                      <p className="flex-1 text-gray-600">
+                        {t("location.contact.schedule")}: {location.schedule}
+                      </p>
                     </div>
                   )}
                 </div>
 
                 {/* Items Aceptados */}
                 <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-900">Acepta:</h4>
+                  <h4 className="text-sm font-medium text-gray-900">{t("location.items.title")}:</h4>
                   <div className="flex flex-wrap gap-2">
                     {location.acceptedItems.map((item, index) => (
                       <span
                         key={generateAcceptedItemKey(item, location.id, index)}
                         className="inline-flex items-center rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700"
                       >
-                        {ACCEPTED_ITEMS[item as AcceptedItemKey] ?? item}
+                        {t(`filters.items.types.${item}`)}
                       </span>
                     ))}
                   </div>
@@ -192,7 +196,7 @@ export function LocationMap({ locations }: LocationMapProps) {
                       className="inline-flex items-center gap-1 text-sm text-teal-600 hover:text-teal-700"
                     >
                       <MapPin className="h-4 w-4" />
-                      Ver en Google Maps
+                      {t("location.contact.viewOnMaps")}
                     </a>
                   </div>
                 )}

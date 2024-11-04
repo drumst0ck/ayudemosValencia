@@ -1,0 +1,54 @@
+{
+  "welcome": {
+    "title": "¡Bienvenido/a a Puntos de Ayuda DANA!",
+    "description": "Este mapa interactivo muestra todos los puntos de recogida de donaciones para ayudar a las personas afectadas por la DANA en Valencia.",
+    "markerInfo": "Cada marcador en el mapa representa un punto donde puedes llevar tus donaciones. Al hacer clic en ellos, podrás ver:",
+    "features": {
+      "address": "Dirección exacta del punto de recogida",
+      "items": "Tipos de donaciones que aceptan",
+      "schedule": "Horarios de recepción",
+      "contact": "Información de contacto"
+    },
+    "filterTip": "Usa los filtros para encontrar los puntos más cercanos a ti o para buscar lugares que acepten donaciones específicas.",
+    "understood": "Entendido"
+  },
+  "filters": {
+    "title": "Filtros",
+    "close": "Cerrar filtros",
+    "location": {
+      "community": "Comunidad Autónoma",
+      "province": "Provincia",
+      "city": "Municipio",
+      "all": "Todas",
+      "allM": "Todos",
+      "acceptedItems": "Items Aceptados"
+    },
+    "items": {
+      "title": "Items Aceptados",
+      "types": {
+        "FOOD": "Alimentos",
+        "CLOTHING": "Ropa",
+        "HYGIENE": "Productos de Higiene",
+        "CLEANING": "Productos de Limpieza",
+        "MEDICINE": "Medicamentos",
+        "TOOLS": "Herramientas",
+        "OTHER": "Otros"
+      }
+    }
+  },
+  "location": {
+    "contact": {
+      "phone": "Teléfono",
+      "email": "Email",
+      "schedule": "Horario",
+      "viewOnMaps": "Ver en Google Maps"
+    },
+    "items": {
+      "title": "Acepta"
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "openSource": "Proyecto Open Source"
+  }
+}
