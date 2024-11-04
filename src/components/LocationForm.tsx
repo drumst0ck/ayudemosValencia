@@ -21,8 +21,8 @@ function extractCoordinatesFromGoogleMapsUrl(
     const coords = searchParams.get("q")?.split(",");
     if (coords?.length === 2) {
       return {
-        latitude: parseFloat(coords[0]),
-        longitude: parseFloat(coords[1]),
+        latitude: parseFloat(coords[0] ?? ""),
+        longitude: parseFloat(coords[1] ?? ""),
       };
     }
 
@@ -30,8 +30,8 @@ function extractCoordinatesFromGoogleMapsUrl(
     const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
     if (match) {
       return {
-        latitude: parseFloat(match[1]),
-        longitude: parseFloat(match[2]),
+        latitude: parseFloat(match[1] ?? ""),
+        longitude: parseFloat(match[2] ?? ""),
       };
     }
 
@@ -69,6 +69,7 @@ export function LocationForm() {
     website: "",
     schedule: "",
     acceptedItems: [],
+    googleMapsUrl: "",
   });
 
   const [newItem, setNewItem] = useState("");
@@ -167,6 +168,7 @@ export function LocationForm() {
         website: "",
         schedule: "",
         acceptedItems: [],
+        googleMapsUrl: "",
       });
 
       alert("Localización guardada correctamente");
