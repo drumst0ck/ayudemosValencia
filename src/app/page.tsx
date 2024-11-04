@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { LocationFilters } from "@/components/LocationFilters";
 import { type LocationFilters as LocationFiltersType } from "@/types/locations";
 import { type Location } from "@/schemas/location";
+import { WelcomePopup } from "@/components/WelcomePopup";
 
 const LocationMap = dynamic(() => import("@/components/LocationMap"), {
   ssr: false,
@@ -56,6 +57,8 @@ export default function HomePage() {
 
   return (
     <main className="relative flex min-h-screen flex-col md:flex-row">
+      <WelcomePopup />
+
       {/* Botón de filtros móvil - Ajustado z-index y posición */}
       <button
         onClick={() => setIsFilterOpen(!isFilterOpen)}
