@@ -113,7 +113,7 @@ export function LocationForm() {
   const validateStep = (step: number) => {
     switch (step) {
       case 0:
-        return !!(formData.name && formData.description);
+        return !!(formData.name);
       case 1:
         return !!(
           formData.address &&
@@ -244,7 +244,7 @@ export function LocationForm() {
   const handleNextStep = () => {
     // Validaciones por paso
     if (currentStep === 0) {
-      if (!formData.name || !formData.description) {
+      if (!formData.name) {
         alert("Por favor completa todos los campos obligatorios");
         return;
       }
@@ -269,7 +269,7 @@ export function LocationForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Si no estamos en el ��ltimo paso, solo avanzamos
+    // Si no estamos en el último paso, solo avanzamos
     if (currentStep < FORM_STEPS.length - 1) {
       handleNextStep();
       return;
@@ -445,7 +445,6 @@ export function LocationForm() {
                       setFormData({ ...formData, description: e.target.value })
                     }
                     className="h-full w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    required
                   />
                 </div>
               </div>
