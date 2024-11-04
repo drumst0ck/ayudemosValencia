@@ -66,10 +66,9 @@ export function LocationMap({ locations }: LocationMapProps) {
     <MapContainer
       center={center}
       zoom={zoom}
-      className="h-[calc(100vh-4rem)] w-full"
+      className="h-[calc(100vh-0rem)] w-full"
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MarkerClusterGroup
