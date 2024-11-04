@@ -10,6 +10,16 @@ type FormData = Omit<
   "id" | "createdAt" | "updatedAt" | "lastVerification" | "verifiedAt"
 >;
 
+const ACCEPTED_ITEMS = {
+  FOOD: "Alimentos",
+  CLOTHING: "Ropa",
+  HYGIENE: "Productos de Higiene",
+  CLEANING: "Productos de Limpieza",
+  MEDICINE: "Medicamentos",
+  TOOLS: "Herramientas",
+  OTHER: "Otros",
+} as const;
+
 function extractCoordinatesFromGoogleMapsUrl(
   url: string,
 ): { latitude: number; longitude: number } | null {
@@ -72,8 +82,6 @@ export function LocationForm() {
     googleMapsUrl: "",
   });
 
-  const [newItem, setNewItem] = useState("");
-
   const [googleMapsUrl, setGoogleMapsUrl] = useState("");
 
   const handleGoogleMapsUrlChange = (
@@ -82,16 +90,31 @@ export function LocationForm() {
     const url = e.target.value;
     setGoogleMapsUrl(url);
 
-    if (url) {
-      const coordinates = extractCoordinatesFromGoogleMapsUrl(url);
-      if (coordinates) {
-        setFormData((prev) => ({
-          ...prev,
-          googleMapsUrl: url,
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
-        }));
-      }
+    // Resetear las coordenadas si el campo está vacío
+    if (!url) {
+      setFormData((prev) => ({
+        ...prev,
+        googleMapsUrl: "",
+        latitude: 0,
+        longitude: 0,
+      }));
+      return;
+    }
+
+    // Intentar extraer las coordenadas
+    const coordinates = extractCoordinatesFromGoogleMapsUrl(url);
+
+    // Actualizar el formulario con las nuevas coordenadas o resetear si no se pudieron extraer
+    setFormData((prev) => ({
+      ...prev,
+      googleMapsUrl: url,
+      latitude: coordinates?.latitude ?? 0,
+      longitude: coordinates?.longitude ?? 0,
+    }));
+
+    // Opcionalmente, mostrar un mensaje si no se pudieron extraer las coordenadas
+    if (!coordinates) {
+      alert("No se pudieron extraer las coordenadas de la URL proporcionada");
     }
   };
 
@@ -148,7 +171,31 @@ export function LocationForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Error al guardar la localización");
+        if (response.status === 409) {
+          // Error de localización cercana existente
+          const confirmCreate = window.confirm(
+            "Ya existe un punto de recogida cercano a estas coordenadas. ¿Deseas crear uno nuevo de todas formas?",
+          );
+
+          if (!confirmCreate) {
+            return;
+          }
+
+          // Si el usuario confirma, hacer otra petición forzando la creación
+          const forceResponse = await fetch("/api/locations?force=true", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+
+          if (!forceResponse.ok) {
+            throw new Error("Error al guardar la localización");
+          }
+        } else {
+          throw new Error(data.error || "Error al guardar la localización");
+        }
       }
 
       // Resetear formulario
@@ -182,19 +229,12 @@ export function LocationForm() {
     }
   };
 
-  const handleAddItem = () => {
-    if (!newItem) return;
-    setFormData({
-      ...formData,
-      acceptedItems: [...formData.acceptedItems, newItem],
-    });
-    setNewItem("");
-  };
-
-  const handleRemoveItem = (index: number) => {
-    setFormData({
-      ...formData,
-      acceptedItems: formData.acceptedItems.filter((_, i) => i !== index),
+  const handleToggleItem = (item: string) => {
+    setFormData((prev) => {
+      const items = prev.acceptedItems.includes(item)
+        ? prev.acceptedItems.filter((i) => i !== item)
+        : [...prev.acceptedItems, item];
+      return { ...prev, acceptedItems: items };
     });
   };
 
@@ -384,40 +424,21 @@ export function LocationForm() {
       {/* Items Aceptados */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Items Aceptados</h3>
-        <div className="space-y-2">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Nuevo item aceptado"
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              className="flex-1 rounded border p-2"
-            />
-            <button
-              type="button"
-              onClick={handleAddItem}
-              className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {Object.entries(ACCEPTED_ITEMS).map(([value, label]) => (
+            <label
+              key={value}
+              className="flex cursor-pointer items-center space-x-2 rounded border p-3 hover:bg-gray-50"
             >
-              Agregar
-            </button>
-          </div>
-          <div className="mt-2 space-y-2">
-            {formData.acceptedItems.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between rounded bg-gray-100 p-2"
-              >
-                <span>{item}</span>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveItem(index)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  Eliminar
-                </button>
-              </div>
-            ))}
-          </div>
+              <input
+                type="checkbox"
+                checked={formData.acceptedItems.includes(value)}
+                onChange={() => handleToggleItem(value)}
+                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span>{label}</span>
+            </label>
+          ))}
         </div>
       </div>
 

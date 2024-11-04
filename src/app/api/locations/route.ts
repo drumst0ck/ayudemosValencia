@@ -3,6 +3,9 @@ import { type NextRequest } from "next/server";
 import { LocationSchema } from "@/schemas/location";
 import { type Prisma } from "@prisma/client";
 
+// Constante para el radio de búsqueda en grados (aproximadamente 100 metros)
+const SEARCH_RADIUS = 0.001;
+
 export async function POST(req: NextRequest) {
   try {
     if (!req.body) {
@@ -31,6 +34,29 @@ export async function POST(req: NextRequest) {
 
     const { latitude, longitude, googleMapsUrl, ...restData } =
       validationResult.data;
+
+    // Buscar localizaciones cercanas
+    const nearbyLocation = await db.location.findFirst({
+      where: {
+        AND: [
+          { latitude: { gte: latitude - SEARCH_RADIUS } },
+          { latitude: { lte: latitude + SEARCH_RADIUS } },
+          { longitude: { gte: longitude - SEARCH_RADIUS } },
+          { longitude: { lte: longitude + SEARCH_RADIUS } },
+        ],
+      },
+    });
+
+    if (nearbyLocation) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Ya existe un punto de recogida cercano a estas coordenadas",
+          nearbyLocation,
+        }),
+        { status: 409 },
+      );
+    }
 
     const locationData: Prisma.LocationCreateInput = {
       ...restData,
