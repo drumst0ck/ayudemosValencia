@@ -557,6 +557,9 @@ export function LocationForm() {
                     className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
                     placeholder="https://maps.google.com/..."
                   />
+                  <p className="text-sm text-gray-500">
+                    Al pegar el enlace de Google Maps, las coordenadas se generarán automáticamente
+                  </p>
                 </div>
 
                 <div className="space-y-2">
