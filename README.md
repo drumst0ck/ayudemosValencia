@@ -13,13 +13,14 @@ Mapa interactivo que muestra todos los puntos de recogida de donaciones para ayu
 
 ## 🛠️ Tecnologías
 
-- [Next.js 14](https://nextjs.org/)
+- [Next.js 15](https://nextjs.org/)
 - [React](https://reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Prisma](https://www.prisma.io/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [Leaflet](https://leafletjs.com/)
+- [t3 Stack](https://create.t3.gg/)
 
 ## 🏗️ Instalación
 
