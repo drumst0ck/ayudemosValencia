@@ -6,15 +6,63 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
+    provider = "mongodb"
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
+model Location {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([name])
+    // Información básica
+    name        String  // Nombre del punto de recogida
+    description String  // Descripción detallada del punto
+    isActive    Boolean @default(true) // Si el punto sigue activo
+
+    // Dirección
+    address         String
+    postalCode      String
+    city            String
+    province        String
+    region          String  // Comunidad Autónoma
+    coordinates     Coordinates
+    
+    // Información de contacto
+    phone           String?
+    email           String?
+    website         String?
+    
+    // Detalles específicos
+    schedule        String  // Horario de atención
+    acceptedItems   String[] // Lista de items que aceptan
+    bankAccounts    BankAccount[]
+    requirements    String? // Requisitos especiales si los hay
+    
+    // Metadata
+    lastVerified   DateTime? // Última vez que se verificó la información
+    verifiedBy     String?   // Quién verificó la información
+}
+
+type Coordinates {
+    latitude  Float
+    longitude Float
+}
+
+type BankAccount {
+    bankName     String
+    accountName  String
+    accountNumber String
+    description  String?
+}
+
+// Enum para tipos de items aceptados (opcional, para referencia)
+enum ItemType {
+    FOOD
+    CLOTHING
+    HYGIENE
+    CLEANING
+    MEDICINE
+    TOOLS
+    OTHER
 }
