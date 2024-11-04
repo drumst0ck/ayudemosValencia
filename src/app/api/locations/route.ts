@@ -19,30 +19,48 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
+
+    // Log para debug
+    console.log("Received data:", body);
+
     const validationResult = LocationSchema.safeParse(body);
-    const forceCreate = req.nextUrl.searchParams.get("force") === "true";
 
     if (!validationResult.success) {
+      // Log detallado de errores de validación
+      console.error("Validation errors:", validationResult.error.errors);
+
       return new Response(
         JSON.stringify({
           success: false,
           error: "Datos inválidos",
-          details: validationResult.error.errors,
+          details: validationResult.error.errors.map((err) => ({
+            path: err.path.join("."),
+            message: err.message,
+          })),
         }),
-        { status: 400 },
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
       );
     }
 
     const { latitude, longitude, googleMapsUrl, ...restData } =
       validationResult.data;
 
+    // Asegurarse de que los números sean válidos
     const locationData: Prisma.LocationCreateInput = {
       ...restData,
-      latitude,
-      longitude,
-      googleMapsUrl,
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+      googleMapsUrl: googleMapsUrl || undefined,
       lastVerification: new Date(),
     };
+
+    // Log para debug
+    console.log("Processed data:", locationData);
 
     const location = await db.location.create({
       data: locationData,
@@ -53,10 +71,16 @@ export async function POST(req: NextRequest) {
         success: true,
         data: location,
       }),
-      { status: 200 },
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
     );
   } catch (error) {
     console.error("Error creating location:", error);
+
     return new Response(
       JSON.stringify({
         success: false,
@@ -64,8 +88,14 @@ export async function POST(req: NextRequest) {
           error instanceof Error
             ? error.message
             : "Error al crear la localización",
+        details: error instanceof Error ? error.stack : undefined,
       }),
-      { status: 500 },
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
     );
   }
 }

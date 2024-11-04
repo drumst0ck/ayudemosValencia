@@ -281,6 +281,26 @@ export function LocationForm() {
       return;
     }
 
+    // Validar que las coordenadas sean números válidos
+    if (isNaN(formData.latitude) || isNaN(formData.longitude)) {
+      alert("Las coordenadas no son válidas");
+      return;
+    }
+
+    // Crear una copia limpia de los datos
+    const cleanFormData = {
+      ...formData,
+      latitude: Number(formData.latitude),
+      longitude: Number(formData.longitude),
+      // Asegurar que los campos opcionales sean undefined si están vacíos
+      phone: formData.phone || undefined,
+      email: formData.email || undefined,
+      website: formData.website || undefined,
+      schedule: formData.schedule || undefined,
+      description: formData.description || undefined,
+      googleMapsUrl: formData.googleMapsUrl || undefined,
+    };
+
     try {
       let url = "/api/locations";
       const requestOptions = {
@@ -288,7 +308,7 @@ export function LocationForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(cleanFormData),
       };
 
       // Primera petición
@@ -557,9 +577,6 @@ export function LocationForm() {
                     className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
                     placeholder="https://maps.google.com/..."
                   />
-                  <p className="text-sm text-gray-500">
-                    Al pegar el enlace de Google Maps, las coordenadas se generarán automáticamente
-                  </p>
                 </div>
 
                 <div className="space-y-2">
