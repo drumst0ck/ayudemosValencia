@@ -245,7 +245,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
       {/* Footer */}
       <div className="mt-6 border-t border-gray-200 pt-4">
         <a
-          href="https://github.com/tu-usuario/tu-repo"
+          href="https://github.com/drumst0ck/ayudemosValencia"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 text-sm text-gray-600 transition hover:text-teal-600"
