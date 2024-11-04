@@ -1,36 +1,62 @@
-import Link from "next/link";
+"use client";
+
+import { Suspense, useState } from "react";
+import { LocationMap } from "@/components/LocationMap";
+import { LocationFilters } from "@/components/LocationFilters";
+import { type LocationFilters as LocationFiltersType } from "@/types/locations";
+import { type Location } from "@/schemas/location";
 
 export default function HomePage() {
+  const [locations, setLocations] = useState<Location[]>([]);
+
+  const handleFiltersChange = async (filters: LocationFiltersType) => {
+    try {
+      // Construir la URL con los filtros
+      const searchParams = new URLSearchParams();
+
+      if (filters.autonomousCommunity) {
+        searchParams.set("autonomousCommunity", filters.autonomousCommunity);
+      }
+
+      if (filters.province) {
+        searchParams.set("province", filters.province);
+      }
+
+      if (filters.city) {
+        searchParams.set("city", filters.city);
+      }
+
+      if (filters.acceptedItems?.length) {
+        searchParams.set("acceptedItems", filters.acceptedItems.join(","));
+      }
+
+      // Hacer la petición a la API
+      const response = await fetch(`/api/locations?${searchParams.toString()}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Error al obtener las localizaciones");
+      }
+
+      setLocations(data.locations);
+    } catch (error) {
+      console.error("Error al filtrar localizaciones:", error);
+      // Aquí podrías mostrar un mensaje de error al usuario
+    }
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
-        </div>
+    <main className="flex min-h-screen">
+      {/* Panel lateral de filtros */}
+      <div className="w-80 border-r bg-gray-50 p-4">
+        <LocationFilters onFiltersChange={handleFiltersChange} />
+      </div>
+
+      {/* Mapa */}
+      <div className="flex-1">
+        <Suspense fallback={<div>Cargando mapa...</div>}>
+          <LocationMap locations={locations} />
+        </Suspense>
       </div>
     </main>
   );

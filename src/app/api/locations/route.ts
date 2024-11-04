@@ -94,3 +94,52 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET(req: NextRequest) {
+  try {
+    const searchParams = req.nextUrl.searchParams;
+
+    // Construir el objeto de filtros
+    const filters: Prisma.LocationWhereInput = {
+      isActive: true,
+    };
+
+    // Aplicar filtros solo si tienen un valor no vacío
+    const autonomousCommunity = searchParams.get("autonomousCommunity");
+    if (autonomousCommunity) {
+      filters.autonomousCommunity = autonomousCommunity;
+    }
+
+    const province = searchParams.get("province");
+    if (province) {
+      filters.province = province;
+    }
+
+    const city = searchParams.get("city");
+    if (city) {
+      filters.city = city;
+    }
+
+    const acceptedItems = searchParams.get("acceptedItems")?.split(",");
+    if (acceptedItems?.length) {
+      filters.acceptedItems = {
+        hasSome: acceptedItems,
+      };
+    }
+
+    const locations = await db.location.findMany({
+      where: filters,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return Response.json({ locations });
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+    return Response.json(
+      { error: "Error al obtener las localizaciones" },
+      { status: 500 },
+    );
+  }
+}
