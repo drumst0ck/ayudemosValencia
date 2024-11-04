@@ -352,10 +352,10 @@ export function LocationForm() {
           </div>
           <div className="mt-4 text-center">
             <h2 className="text-xl font-semibold text-gray-800">
-              {FORM_STEPS[currentStep].title}
+              {FORM_STEPS[currentStep]?.title}
             </h2>
             <p className="text-sm text-gray-500">
-              {FORM_STEPS[currentStep].description}
+              {FORM_STEPS[currentStep]?.description}
             </p>
           </div>
         </div>
