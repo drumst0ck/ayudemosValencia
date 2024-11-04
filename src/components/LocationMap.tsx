@@ -16,9 +16,13 @@ type LocationMapProps = {
 
 type AcceptedItemKey = keyof typeof ACCEPTED_ITEMS;
 
-// Mover fuera del componente las funciones y configuraciones estáticas
-const generateUniqueId = () => {
-  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+// Función mejorada para generar IDs únicos usando timestamp y datos del elemento
+const generateLocationKey = (location: Location) => {
+  return `${location.id}-${location.latitude}-${location.longitude}`;
+};
+
+const generateAcceptedItemKey = (item: string, locationId: string, index: number) => {
+  return `${locationId}-${item}-${index}`;
 };
 
 // Inicializar los iconos una sola vez
@@ -78,7 +82,7 @@ export function LocationMap({ locations }: LocationMapProps) {
       >
         {locations.map((location) => (
           <Marker
-            key={`${location.latitude}-${location.longitude}`}
+            key={generateLocationKey(location)}
             position={[location.latitude, location.longitude]}
             icon={customIcon}
           >
@@ -104,8 +108,8 @@ export function LocationMap({ locations }: LocationMapProps) {
                 <div className="text-sm">
                   <strong>Acepta:</strong>
                   <ul className="list-inside list-disc">
-                    {location.acceptedItems.map((item) => (
-                      <li key={item}>
+                    {location.acceptedItems.map((item, index) => (
+                      <li key={generateAcceptedItemKey(item, location.id, index)}>
                         {ACCEPTED_ITEMS[item as AcceptedItemKey] ?? item}
                       </li>
                     ))}
