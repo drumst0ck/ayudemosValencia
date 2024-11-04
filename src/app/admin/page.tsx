@@ -4,7 +4,7 @@ export default function AdminPage() {
   return (
     <main className="container mx-auto p-4">
       <h1 className="mb-8 text-3xl font-bold">Panel de Administración</h1>
-      <div className="rounded-lg bg-white p-6 shadow-lg">
+      <div className="rounded-lg">
         <h2 className="mb-6 text-xl font-semibold">
           Agregar Nueva Localización
         </h2>

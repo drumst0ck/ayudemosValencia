@@ -109,10 +109,55 @@ export function LocationForm() {
 
   const [currentStep, setCurrentStep] = useState(0);
 
-  // Función para navegar entre pasos
+  // Agregar esta función para validar cada paso
+  const validateStep = (step: number) => {
+    switch (step) {
+      case 0:
+        return !!(formData.name && formData.description);
+      case 1:
+        return !!(
+          formData.address &&
+          formData.postalCode &&
+          formData.city &&
+          formData.province &&
+          formData.autonomousCommunity &&
+          formData.latitude &&
+          formData.longitude
+        );
+      case 2:
+        // El paso 3 no tiene campos obligatorios
+        return true;
+      case 3:
+        return formData.acceptedItems.length > 0;
+      default:
+        return false;
+    }
+  };
+
+  // Modificar la función que maneja el cambio de paso
+  const handleStepChange = (newStep: number) => {
+    // Si intentamos avanzar, validamos el paso actual
+    if (newStep > currentStep) {
+      for (let i = currentStep; i < newStep; i++) {
+        if (!validateStep(i)) {
+          alert(
+            "Por favor completa todos los campos obligatorios antes de continuar",
+          );
+          return;
+        }
+      }
+    }
+    setCurrentStep(newStep);
+  };
+
+  // Modificar las funciones de navegación existentes
   const nextStep = () => {
-    if (currentStep < FORM_STEPS.length - 1) {
+    if (currentStep < FORM_STEPS.length - 1 && validateStep(currentStep)) {
       setCurrentStep(currentStep + 1);
+    } else if (!validateStep(currentStep)) {
+      alert(
+        "Por favor completa todos los campos obligatorios antes de continuar",
+      );
     }
   };
 
@@ -224,7 +269,7 @@ export function LocationForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Si no estamos en el último paso, solo avanzamos
+    // Si no estamos en el ��ltimo paso, solo avanzamos
     if (currentStep < FORM_STEPS.length - 1) {
       handleNextStep();
       return;
@@ -237,43 +282,41 @@ export function LocationForm() {
     }
 
     try {
-      const response = await fetch("/api/locations", {
+      let url = "/api/locations";
+      const requestOptions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-      });
+      };
 
-      const data = await response.json();
+      // Primera petición
+      let response = await fetch(url, requestOptions);
+      let data = await response.json();
 
-      if (!response.ok) {
-        if (response.status === 409) {
-          const confirmCreate = window.confirm(
-            "Ya existe un punto de recogida cercano a estas coordenadas. ¿Deseas crear uno nuevo de todas formas?",
-          );
+      // Si hay un punto cercano, preguntar al usuario
+      if (response.status === 409) {
+        const confirmCreate = window.confirm(
+          "Ya existe un punto de recogida cercano a estas coordenadas. ¿Deseas crear uno nuevo de todas formas?",
+        );
 
-          if (!confirmCreate) {
-            return;
-          }
-
-          const forceResponse = await fetch("/api/locations?force=true", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          });
-
-          if (!forceResponse.ok) {
-            throw new Error("Error al guardar la localización");
-          }
-        } else {
-          throw new Error(data.error || "Error al guardar la localización");
+        if (!confirmCreate) {
+          return;
         }
+
+        // Si el usuario confirma, hacer la petición con force=true
+        url = "/api/locations?force=true";
+        response = await fetch(url, requestOptions);
+        data = await response.json();
       }
 
-      // Resetear formulario
+      // Si la respuesta no es exitosa, lanzar error
+      if (!response.ok) {
+        throw new Error(data.error || "Error al guardar la localización");
+      }
+
+      // Si todo fue exitoso, resetear el formulario
       setFormData({
         name: "",
         description: "",
@@ -320,36 +363,49 @@ export function LocationForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 to-teal-50 p-6">
+    <div className="p-6">
       <div className="mx-auto max-w-4xl rounded-xl bg-white/80 p-6 shadow-xl backdrop-blur">
         {/* Indicador de progreso */}
         <div className="mb-8">
-          <div className="flex justify-between">
-            {FORM_STEPS.map((step, index) => (
+          <div className="relative mx-auto max-w-2xl">
+            <div className="flex items-center justify-between">
+              {/* Líneas de fondo */}
+              <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 bg-gray-300" />
+
+              {/* Línea de progreso */}
               <div
-                key={step.id}
-                className="flex flex-1 items-center"
-                onClick={() => setCurrentStep(index)}
-              >
+                className="absolute left-0 top-1/2 h-1 -translate-y-1/2 bg-teal-500 transition-all duration-300"
+                style={{
+                  width: `${(currentStep / (FORM_STEPS.length - 1)) * 100}%`,
+                }}
+              />
+
+              {/* Círculos numerados */}
+              {FORM_STEPS.map((step, index) => (
                 <div
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 ${
-                    index <= currentStep
-                      ? "border-teal-500 bg-teal-50 text-teal-600"
-                      : "border-gray-300 bg-white text-gray-500"
-                  } cursor-pointer transition-colors duration-200`}
+                  key={step.id}
+                  className="relative flex items-center justify-center"
+                  onClick={() => handleStepChange(index)}
                 >
-                  {index + 1}
-                </div>
-                {index < FORM_STEPS.length - 1 && (
                   <div
-                    className={`h-1 flex-1 ${
-                      index < currentStep ? "bg-teal-500" : "bg-gray-300"
-                    }`}
-                  />
-                )}
-              </div>
-            ))}
+                    className={`z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white ${
+                      index <= currentStep
+                        ? "border-teal-500 bg-teal-50 text-teal-600"
+                        : "border-gray-300 text-gray-500"
+                    } ${
+                      index > currentStep + 1
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
+                    } transition-colors duration-200`}
+                  >
+                    {index + 1}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* Título y descripción del paso */}
           <div className="mt-4 text-center">
             <h2 className="text-xl font-semibold text-gray-800">
               {FORM_STEPS[currentStep]?.title}
