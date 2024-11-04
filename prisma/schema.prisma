@@ -27,6 +27,7 @@ model Location {
     // Coordenadas para el mapa
     latitude        Float
     longitude       Float
+    googleMapsUrl   String?
     
     // Información de contacto
     phone           String?

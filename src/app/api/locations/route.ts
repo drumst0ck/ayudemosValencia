@@ -29,12 +29,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { latitude, longitude, ...restData } = validationResult.data;
+    const { latitude, longitude, googleMapsUrl, ...restData } =
+      validationResult.data;
 
     const locationData: Prisma.LocationCreateInput = {
       ...restData,
       latitude,
       longitude,
+      googleMapsUrl,
       lastVerification: new Date(),
     };
 

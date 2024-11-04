@@ -10,6 +10,7 @@ export const LocationSchema = z.object({
   autonomousCommunity: z.string(),
   latitude: z.number(),
   longitude: z.number(),
+  googleMapsUrl: z.string().nullable(),
   phone: z.string().nullable(),
   email: z.string().nullable(),
   website: z.string().nullable(),

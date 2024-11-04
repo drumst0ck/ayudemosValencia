@@ -10,6 +10,42 @@ type FormData = Omit<
   "id" | "createdAt" | "updatedAt" | "lastVerification" | "verifiedAt"
 >;
 
+function extractCoordinatesFromGoogleMapsUrl(
+  url: string,
+): { latitude: number; longitude: number } | null {
+  try {
+    // Intentar extraer coordenadas de diferentes formatos de URL de Google Maps
+
+    // Formato: https://www.google.com/maps?q=40.4167,-3.7037
+    const searchParams = new URL(url).searchParams;
+    const coords = searchParams.get("q")?.split(",");
+    if (coords?.length === 2) {
+      return {
+        latitude: parseFloat(coords[0]),
+        longitude: parseFloat(coords[1]),
+      };
+    }
+
+    // Formato: https://www.google.com/maps/@40.4167,-3.7037,15z
+    const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (match) {
+      return {
+        latitude: parseFloat(match[1]),
+        longitude: parseFloat(match[2]),
+      };
+    }
+
+    // Formato: https://goo.gl/maps/xxx
+    // Para este formato necesitaríamos hacer una petición al servidor
+    // y seguir la redirección para obtener las coordenadas
+
+    return null;
+  } catch (error) {
+    console.error("Error al extraer coordenadas:", error);
+    return null;
+  }
+}
+
 export function LocationForm() {
   const [communities] = useState<Community[]>(territoriesData as Community[]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
@@ -36,6 +72,27 @@ export function LocationForm() {
   });
 
   const [newItem, setNewItem] = useState("");
+
+  const [googleMapsUrl, setGoogleMapsUrl] = useState("");
+
+  const handleGoogleMapsUrlChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const url = e.target.value;
+    setGoogleMapsUrl(url);
+
+    if (url) {
+      const coordinates = extractCoordinatesFromGoogleMapsUrl(url);
+      if (coordinates) {
+        setFormData((prev) => ({
+          ...prev,
+          googleMapsUrl: url,
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+        }));
+      }
+    }
+  };
 
   // Efecto para actualizar provincias cuando cambia la comunidad
   useEffect(() => {
@@ -155,7 +212,7 @@ export function LocationForm() {
           />
           <textarea
             placeholder="Descripción"
-            value={formData.description}
+            value={formData.description ?? ""}
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
@@ -239,10 +296,24 @@ export function LocationForm() {
         </div>
       </div>
 
-      {/* Coordenadas */}
+      {/* Coordenadas y Google Maps */}
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Coordenadas</h3>
+        <h3 className="text-lg font-medium">Ubicación en el Mapa</h3>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="col-span-full">
+            <input
+              type="url"
+              placeholder="URL de Google Maps"
+              value={googleMapsUrl}
+              onChange={handleGoogleMapsUrlChange}
+              className="w-full rounded border p-2"
+            />
+            <p className="mt-1 text-sm text-gray-500">
+              Pega la URL de Google Maps para obtener las coordenadas
+              automáticamente
+            </p>
+          </div>
+
           <input
             type="number"
             step="any"
