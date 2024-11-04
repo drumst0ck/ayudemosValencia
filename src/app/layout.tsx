@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "Puntos de Ayuda DANA Valencia",
     description: "Encuentra puntos de recogida de donaciones para ayudar a los afectados por la DANA en Valencia",
   },
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.svg" }],
 };
 
 export default function RootLayout({
