@@ -105,11 +105,6 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onFiltersChange(filters);
-    onFilterApplied?.();
-  };
 
   return (
     <div className="space-y-4 rounded-lg bg-white p-4 shadow">
