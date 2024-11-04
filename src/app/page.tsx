@@ -1,10 +1,15 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { LocationMap } from "@/components/LocationMap";
+import dynamic from "next/dynamic";
 import { LocationFilters } from "@/components/LocationFilters";
 import { type LocationFilters as LocationFiltersType } from "@/types/locations";
 import { type Location } from "@/schemas/location";
+
+// Cargar LocationMap dinámicamente para evitar el error de "window is not defined"
+const LocationMap = dynamic(() => import("@/components/LocationMap"), {
+  ssr: false, // Desactivar el renderizado en el servidor
+});
 
 export default function HomePage() {
   const [locations, setLocations] = useState<Location[]>([]);
