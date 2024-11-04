@@ -177,7 +177,7 @@ export function LocationMap({ locations }: LocationMapProps) {
                   <div className="flex flex-wrap gap-2">
                     {location.acceptedItems.map((item, index) => (
                       <span
-                        key={generateAcceptedItemKey(item, location.id, index)}
+                        key={generateAcceptedItemKey(item, location.id ?? "", index)}
                         className="inline-flex items-center rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700"
                       >
                         {t(`filters.items.types.${item}`)}
