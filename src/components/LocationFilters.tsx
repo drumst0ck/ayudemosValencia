@@ -12,9 +12,10 @@ const generateUniqueId = () => {
 
 type LocationFiltersProps = {
   onFiltersChange: (filters: LocationFilters) => void;
+  onFilterApplied?: () => void;
 };
 
-export function LocationFilters({ onFiltersChange }: LocationFiltersProps) {
+export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFiltersProps) {
   const [communities] = useState<Community[]>(territoriesData as Community[]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
   const [provinces, setProvinces] = useState([] as Community["provinces"]);
@@ -102,6 +103,12 @@ export function LocationFilters({ onFiltersChange }: LocationFiltersProps) {
       city: selectedTown,
       acceptedItems: newItems,
     });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onFiltersChange(filters);
+    onFilterApplied?.();
   };
 
   return (

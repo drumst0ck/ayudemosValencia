@@ -18,7 +18,7 @@ type AcceptedItemKey = keyof typeof ACCEPTED_ITEMS;
 
 // Función mejorada para generar IDs únicos usando timestamp y datos del elemento
 const generateLocationKey = (location: Location) => {
-  return `${location.id}-${location.latitude}-${location.longitude}`;
+  return `${location?.id}-${location.latitude}-${location.longitude}`;
 };
 
 const generateAcceptedItemKey = (item: string, locationId: string, index: number) => {
@@ -66,11 +66,36 @@ export function LocationMap({ locations }: LocationMapProps) {
     <MapContainer
       center={center}
       zoom={zoom}
-      className="h-[calc(100vh-0rem)] w-full"
+      className="h-[100vh] w-full md:h-[100vh]"
+      zoomControl={false}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <div className="leaflet-control-container">
+        <div className="leaflet-top leaflet-right">
+          <div className="leaflet-control-zoom leaflet-bar leaflet-control">
+            <a
+              className="leaflet-control-zoom-in"
+              href="#"
+              title="Zoom in"
+              role="button"
+              aria-label="Zoom in"
+            >
+              +
+            </a>
+            <a
+              className="leaflet-control-zoom-out"
+              href="#"
+              title="Zoom out"
+              role="button"
+              aria-label="Zoom out"
+            >
+              −
+            </a>
+          </div>
+        </div>
+      </div>
       <MarkerClusterGroup
         chunkedLoading
         spiderfyOnMaxZoom={true}
