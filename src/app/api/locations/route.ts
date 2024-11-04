@@ -2,7 +2,7 @@ import { db } from "@/server/db";
 import { type NextRequest } from "next/server";
 import { LocationSchema } from "@/schemas/location";
 import { type Prisma } from "@prisma/client";
-
+export const runtime = "edge";
 // Constante para el radio de búsqueda en grados (aproximadamente 100 metros)
 const SEARCH_RADIUS = 0.001;
 
