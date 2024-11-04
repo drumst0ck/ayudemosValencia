@@ -44,10 +44,41 @@
 }
 
 /* Ajustes para el popup en móvil */
+.leaflet-popup-content-wrapper {
+  padding: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
 .leaflet-popup-content {
-  margin: 13px 19px;
-  min-width: 200px;
-  max-width: 300px;
+  margin: 0;
+  min-width: 280px;
+  max-width: 320px;
+}
+
+.location-popup {
+  padding: 1rem;
+}
+
+.leaflet-container a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.leaflet-popup-tip-container {
+  margin-top: -1px;
+}
+
+.leaflet-popup-close-button {
+  padding: 0.5rem !important;
+  font-size: 1.25rem !important;
+  color: #666 !important;
+  transition: color 0.2s;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #333 !important;
+  background: none !important;
 }
 
 @media (max-width: 768px) {

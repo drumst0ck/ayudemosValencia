@@ -9,6 +9,7 @@ import L from "leaflet";
 import "leaflet.markercluster";
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'react-leaflet-markercluster/dist/styles.min.css';
+import { Phone, Mail, Clock, MapPin, Info } from 'lucide-react';
 
 type LocationMapProps = {
   locations: Location[];
@@ -110,35 +111,91 @@ export function LocationMap({ locations }: LocationMapProps) {
             position={[location.latitude, location.longitude]}
             icon={customIcon}
           >
-            <Popup>
-              <div className="space-y-2">
-                <h3 className="font-semibold">{location.name}</h3>
-                <p className="text-sm">{location.description}</p>
-                <p className="text-sm">
-                  {location.address}, {location.postalCode}
-                  <br />
-                  {location.city}, {location.province}
-                </p>
-                {location.phone && (
-                  <p className="text-sm">
-                    📞 <a href={`tel:${location.phone}`}>{location.phone}</a>
-                  </p>
-                )}
-                {location.email && (
-                  <p className="text-sm">
-                    ✉️ <a href={`mailto:${location.email}`}>{location.email}</a>
-                  </p>
-                )}
-                <div className="text-sm">
-                  <strong>Acepta:</strong>
-                  <ul className="list-inside list-disc">
-                    {location.acceptedItems.map((item, index) => (
-                      <li key={generateAcceptedItemKey(item, location.id, index)}>
-                        {ACCEPTED_ITEMS[item as AcceptedItemKey] ?? item}
-                      </li>
-                    ))}
-                  </ul>
+            <Popup className="location-popup">
+              <div className="space-y-4">
+                {/* Encabezado */}
+                <div className="border-b border-gray-200 pb-2">
+                  <h3 className="text-lg font-semibold text-teal-600">{location.name}</h3>
+                  {location.description && location.description.trim() !== "" && (
+                    <div className="mt-1 flex items-center gap-1.5 text-sm text-gray-600">
+                      <Info className="h-4 w-4 flex-shrink-0" />
+                      <p className="flex-1">{location.description}</p>
+                    </div>
+                  )}
                 </div>
+
+                {/* Dirección */}
+                <div className="flex items-center gap-1.5 text-sm">
+                  <MapPin className="h-4 w-4 flex-shrink-0 text-gray-500" />
+                  <div className="flex-1">
+                    <p className="text-gray-900">{location.address}</p>
+                    <p className="text-gray-600">
+                      {location.postalCode} {location.city}, {location.province}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Contacto */}
+                <div className="space-y-2">
+                  {location.phone && location.phone.trim() !== "" && (
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <Phone className="h-4 w-4 flex-shrink-0 text-gray-500" />
+                      <a 
+                        href={`tel:${location.phone}`}
+                        className="flex-1 text-teal-600 hover:underline"
+                      >
+                        {location.phone}
+                      </a>
+                    </div>
+                  )}
+                  {location.email && location.email.trim() !== "" && (
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <Mail className="h-4 w-4 flex-shrink-0 text-gray-500" />
+                      <a 
+                        href={`mailto:${location.email}`}
+                        className="flex-1 text-teal-600 hover:underline"
+                      >
+                        {location.email}
+                      </a>
+                    </div>
+                  )}
+                  {location.schedule && location.schedule.trim() !== "" && (
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <Clock className="h-4 w-4 flex-shrink-0 text-gray-500" />
+                      <p className="flex-1 text-gray-600">{location.schedule}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Items Aceptados */}
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-gray-900">Acepta:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {location.acceptedItems.map((item, index) => (
+                      <span
+                        key={generateAcceptedItemKey(item, location.id, index)}
+                        className="inline-flex items-center rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700"
+                      >
+                        {ACCEPTED_ITEMS[item as AcceptedItemKey] ?? item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Enlaces adicionales */}
+                {location.googleMapsUrl && (
+                  <div className="border-t border-gray-200 pt-2">
+                    <a
+                      href={location.googleMapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm text-teal-600 hover:text-teal-700"
+                    >
+                      <MapPin className="h-4 w-4" />
+                      Ver en Google Maps
+                    </a>
+                  </div>
+                )}
               </div>
             </Popup>
           </Marker>
