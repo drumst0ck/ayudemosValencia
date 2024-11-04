@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { locales } from "@/i18n";
+import { locales, type Locale } from "@/i18n";
 
 export const metadata: Metadata = {
   title: "Puntos de Donación DANA Valencia",
@@ -27,14 +27,16 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+type Props = {
+  children: React.ReactNode;
+  params: { locale: Locale };
+};
+
 export default function RootLayout({
   children,
   params: { locale },
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
-  if (!locales.includes(locale as any)) notFound();
+}: Props) {
+  if (!locales.includes(locale)) notFound();
 
   return (
     <html lang={locale} className={`${GeistSans.variable}`}>
