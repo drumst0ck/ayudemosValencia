@@ -89,7 +89,7 @@ function InstructionsModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="fixed z-50 flex items-center justify-center bg-black/50">
       <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
         <h2 className="mb-4 text-xl font-bold text-gray-800">
           Instrucciones para añadir un punto de recogida
