@@ -3,9 +3,6 @@ import { type NextRequest } from "next/server";
 import { LocationSchema } from "@/schemas/location";
 import { type Prisma } from "@prisma/client";
 
-// Constante para el radio de búsqueda en grados (aproximadamente 100 metros)
-const SEARCH_RADIUS = 0.001;
-
 export async function POST(req: NextRequest) {
   try {
     if (!req.body) {
