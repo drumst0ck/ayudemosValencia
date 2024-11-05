@@ -59,7 +59,7 @@ export default function HomePage() {
   );
 
   return (
-    <main className="relative flex min-h-screen flex-col md:flex-row">
+    <main className="relative flex h-[100dvh] flex-col md:flex-row">
       <WelcomePopup />
 
       {/* Botón de filtros móvil - Ajustado z-index y posición */}
@@ -84,9 +84,9 @@ export default function HomePage() {
         </svg>
       </button>
 
-      {/* Panel de filtros - Ajustado z-index */}
+      {/* Panel de filtros - Ajustado para manejar scroll interno */}
       <div
-        className={`fixed inset-y-0 left-0 z-[1001] w-80 transform overflow-y-auto bg-white p-6 shadow-lg transition-transform duration-300 ease-in-out md:relative md:transform-none md:border-r md:shadow-none ${
+        className={`fixed inset-y-0 left-0 z-[1001] w-80 transform overflow-hidden bg-white shadow-lg transition-transform duration-300 ease-in-out md:relative md:transform-none md:border-r md:shadow-none ${
           isFilterOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
@@ -129,7 +129,7 @@ export default function HomePage() {
         />
       )}
 
-      {/* Mapa */}
+      {/* Mapa - Ajustado para ocupar el espacio restante */}
       <div className="flex-1">
         <Suspense fallback={<div>Cargando mapa...</div>}>
           <LocationMap locations={locations} />

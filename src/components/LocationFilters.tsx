@@ -130,171 +130,172 @@ export function LocationFilters({
   };
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-1 space-y-6">
-        {/* Banner de Emergencia */}
-        <div className="rounded-lg bg-red-600 p-4 text-white shadow-lg">
-          <div className="flex flex-col items-center gap-2 text-center">
-            <p className="font-medium">{t("emergency.title")}</p>
-            <a
-              href="tel:900365112"
-              className="text-xl font-bold hover:underline"
-            >
-              {t("emergency.phone")}
-            </a>
-          </div>
-        </div>
-
-        {/* Selector de idioma */}
-        <div className="flex items-center justify-between gap-4 border-b border-gray-200 pb-4">
-          <div className="flex items-center gap-2">
-            <Globe2 className="h-4 w-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700">Idioma</span>
-          </div>
-          <div className="flex gap-2">
-            {[
-              { code: "es", label: "ES" },
-              { code: "ca", label: "VA" },
-            ].map((lang) => (
-              <button
-                key={lang.code}
-                onClick={() => handleLanguageChange(lang.code)}
-                className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
-                  pathname.split("/")[1] === lang.code
-                    ? "bg-teal-100 text-teal-700"
-                    : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                }`}
-                aria-label={`Cambiar a ${lang.code === "es" ? "Español" : "Valencià"}`}
+    <div className="flex h-[100dvh] flex-col md:h-full">
+      <div className="flex-1 overflow-y-auto">
+        <div className="space-y-6 p-6">
+          {/* Banner de Emergencia */}
+          <div className="rounded-lg bg-red-600 p-4 text-white shadow-lg">
+            <div className="flex flex-col items-center gap-2 text-center">
+              <p className="font-medium">{t("emergency.title")}</p>
+              <a
+                href="tel:900365112"
+                className="text-xl font-bold hover:underline"
               >
-                {lang.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Nuevo botón de añadir localización */}
-        <div className="rounded-lg border border-teal-100 bg-teal-50 p-4">
-          <div className="mb-3 flex items-start gap-3">
-            <div className="rounded-full bg-teal-100 p-2">
-              <Plus className="h-5 w-5 text-teal-600" />
-            </div>
-            <div>
-              <h4 className="font-medium text-teal-900">
-                {t("filters.addLocation.title") ??
-                  "¿Conoces un punto de recogida?"}
-              </h4>
-              <p className="mt-1 text-sm text-teal-700">
-                {t("filters.addLocation.description") ??
-                  "Ayuda a la comunidad añadiendo nuevos puntos de recogida. Por favor, verifica la información antes de publicarla."}
-              </p>
+                {t("emergency.phone")}
+              </a>
             </div>
           </div>
-          <Link
-            href="/admin"
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-700"
-          >
-            <Plus className="h-4 w-4" />
-            {t("filters.addLocation.button") ?? "Añadir punto de recogida"}
-          </Link>
-        </div>
 
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-800">
-            {t("filters.title")}
-          </h3>
+          {/* Selector de idioma */}
+          <div className="flex items-center justify-between gap-4 border-b border-gray-200 pb-4">
+            <div className="flex items-center gap-2">
+              <Globe2 className="h-4 w-4 text-gray-500" />
+              <span className="text-sm font-medium text-gray-700">Idioma</span>
+            </div>
+            <div className="flex gap-2">
+              {[
+                { code: "es", label: "ES" },
+                { code: "ca", label: "VA" },
+              ].map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => handleLanguageChange(lang.code)}
+                  className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
+                    pathname.split("/")[1] === lang.code
+                      ? "bg-teal-100 text-teal-700"
+                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                  }`}
+                  aria-label={`Cambiar a ${lang.code === "es" ? "Español" : "Valencià"}`}
+                >
+                  {lang.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Nuevo botón de añadir localización */}
+          <div className="rounded-lg border border-teal-100 bg-teal-50 p-4">
+            <div className="mb-3 flex items-start gap-3">
+              <div className="rounded-full bg-teal-100 p-2">
+                <Plus className="h-5 w-5 text-teal-600" />
+              </div>
+              <div>
+                <h4 className="font-medium text-teal-900">
+                  {t("filters.addLocation.title") ??
+                    "¿Conoces un punto de recogida?"}
+                </h4>
+                <p className="mt-1 text-sm text-teal-700">
+                  {t("filters.addLocation.description") ??
+                    "Ayuda a la comunidad añadiendo nuevos puntos de recogida. Por favor, verifica la información antes de publicarla."}
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/admin"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-700"
+            >
+              <Plus className="h-4 w-4" />
+              {t("filters.addLocation.button") ?? "Añadir punto de recogida"}
+            </Link>
+          </div>
 
           <div className="space-y-4">
-            {/* Comunidad Autónoma */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                <Building2 className="h-4 w-4" />
-                {t("filters.location.community")}
-              </label>
-              <select
-                value={selectedCommunity}
-                onChange={(e) => handleCommunityChange(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 bg-white p-2.5 shadow-sm transition hover:border-teal-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
-              >
-                <option value="">{t("filters.location.all")}</option>
-                {communities.map((community) => (
-                  <option key={community.code} value={community.label}>
-                    {community.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <h3 className="text-xl font-semibold text-gray-800">
+              {t("filters.title")}
+            </h3>
 
-            {/* Provincia */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                <Building className="h-4 w-4" />
-                {t("filters.location.province")}
-              </label>
-              <select
-                value={selectedProvince}
-                onChange={(e) => handleProvinceChange(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 bg-white p-2.5 shadow-sm transition hover:border-teal-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 disabled:bg-gray-100 disabled:opacity-50"
-                disabled={!selectedCommunity}
-              >
-                <option value="">{t("filters.location.all")}</option>
-                {provinces.map((province) => (
-                  <option key={province.code} value={province.label}>
-                    {province.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <div className="space-y-4">
+              {/* Comunidad Autónoma */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <Building2 className="h-4 w-4" />
+                  {t("filters.location.community")}
+                </label>
+                <select
+                  value={selectedCommunity}
+                  onChange={(e) => handleCommunityChange(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 bg-white p-2.5 shadow-sm transition hover:border-teal-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                >
+                  <option value="">{t("filters.location.all")}</option>
+                  {communities.map((community) => (
+                    <option key={community.code} value={community.label}>
+                      {community.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* Municipio */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                <MapPin className="h-4 w-4" />
-                {t("filters.location.city")}
-              </label>
-              <select
-                value={selectedTown}
-                onChange={(e) => handleTownChange(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 bg-white p-2.5 shadow-sm transition hover:border-teal-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 disabled:bg-gray-100 disabled:opacity-50"
-                disabled={!selectedProvince}
-              >
-                <option value="">{t("filters.location.all")}</option>
-                {towns.map((town) => (
-                  <option key={town.code} value={town.label}>
-                    {town.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+              {/* Provincia */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <Building className="h-4 w-4" />
+                  {t("filters.location.province")}
+                </label>
+                <select
+                  value={selectedProvince}
+                  onChange={(e) => handleProvinceChange(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 bg-white p-2.5 shadow-sm transition hover:border-teal-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 disabled:bg-gray-100 disabled:opacity-50"
+                  disabled={!selectedCommunity}
+                >
+                  <option value="">{t("filters.location.all")}</option>
+                  {provinces.map((province) => (
+                    <option key={province.code} value={province.label}>
+                      {province.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* Items Aceptados */}
-            <div className="space-y-3">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                <Package className="h-4 w-4" />
-                {t("filters.location.acceptedItems")}
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                {Object.entries(ACCEPTED_ITEMS).map(([value, label]) => (
-                  <label
-                    key={value}
-                    className="flex items-center gap-2 rounded-lg border border-gray-200 p-2 text-sm transition hover:border-teal-500 hover:bg-teal-50"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.includes(value)}
-                      onChange={() => handleItemToggle(value)}
-                      className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
-                    />
-                    <span className="text-gray-700">{label}</span>
-                  </label>
-                ))}
+              {/* Municipio */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <MapPin className="h-4 w-4" />
+                  {t("filters.location.city")}
+                </label>
+                <select
+                  value={selectedTown}
+                  onChange={(e) => handleTownChange(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 bg-white p-2.5 shadow-sm transition hover:border-teal-500 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 disabled:bg-gray-100 disabled:opacity-50"
+                  disabled={!selectedProvince}
+                >
+                  <option value="">{t("filters.location.all")}</option>
+                  {towns.map((town) => (
+                    <option key={town.code} value={town.label}>
+                      {town.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Items Aceptados */}
+              <div className="space-y-3">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <Package className="h-4 w-4" />
+                  {t("filters.location.acceptedItems")}
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  {Object.entries(ACCEPTED_ITEMS).map(([value, label]) => (
+                    <label
+                      key={value}
+                      className="flex items-center gap-2 rounded-lg border border-gray-200 p-2 text-sm transition hover:border-teal-500 hover:bg-teal-50"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(value)}
+                        onChange={() => handleItemToggle(value)}
+                        className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                      />
+                      <span className="text-gray-700">{label}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="mt-6 border-t border-gray-200 pt-4">
+      <div className="border-t border-gray-200 p-4">
         <a
           href="https://github.com/drumst0ck/ayudemosValencia"
           target="_blank"
