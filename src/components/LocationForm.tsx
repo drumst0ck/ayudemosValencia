@@ -460,34 +460,8 @@ export function LocationForm() {
   return (
     <div className="p-6">
       <div className="mx-auto max-w-4xl rounded-xl bg-white/80 p-6 shadow-xl backdrop-blur">
-        {/* Agregar el botón de ayuda */}
-        <button
-          onClick={() => setShowInstructions(true)}
-          className="mb-4 flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-          >
-            <circle cx="12" cy="12" r="10" strokeWidth="2" />
-            <path d="M12 16v-4" strokeWidth="2" />
-            <path d="M12 8h.01" strokeWidth="2" />
-          </svg>
-          Ver instrucciones
-        </button>
-
-        {/* Agregar el modal */}
-        <InstructionsModal
-          isOpen={showInstructions}
-          onClose={() => setShowInstructions(false)}
-        />
-
-        {/* Indicador de progreso */}
-        <div className="mb-8">
-          <div className="relative mx-auto max-w-2xl">
+        <div className="mx-auto max-w-4xl">
+          <div className="mx-auto max-w-2xl">
             <div className="flex items-center justify-between">
               {/* Líneas de fondo */}
               <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 bg-gray-300" />
@@ -534,314 +508,323 @@ export function LocationForm() {
               {FORM_STEPS[currentStep]?.description}
             </p>
           </div>
-        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Paso 1: Información Básica */}
-          {currentStep === 0 && (
-            <div className="space-y-4 transition-all duration-300">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Nombre del punto
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Descripción
-                  </label>
-                  <textarea
-                    value={formData.description ?? ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, description: e.target.value })
-                    }
-                    className="h-full w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Paso 2: Ubicación */}
-          {currentStep === 1 && (
-            <div className="space-y-4 transition-all duration-300">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Comunidad Autónoma
-                  </label>
-                  <select
-                    value={selectedCommunity}
-                    onChange={(e) => setSelectedCommunity(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    required
-                  >
-                    <option value="">Selecciona Comunidad Autónoma</option>
-                    {communities.map((community) => (
-                      <option key={community.label} value={community.label}>
-                        {community.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Provincia
-                  </label>
-                  <select
-                    value={selectedProvince}
-                    onChange={(e) => setSelectedProvince(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    required
-                    disabled={!selectedCommunity}
-                  >
-                    <option value="">Selecciona Provincia</option>
-                    {provinces.map((province) => (
-                      <option key={province.label} value={province.label}>
-                        {province.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Municipio
-                  </label>
-                  <select
-                    value={formData.city}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, city: e.target.value }))
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    required
-                    disabled={!selectedProvince}
-                  >
-                    <option value="">Selecciona Municipio</option>
-                    {towns.map((town) => (
-                      <option key={town.label} value={town.label}>
-                        {town.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Dirección
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.address}
-                    onChange={(e) =>
-                      setFormData({ ...formData, address: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Código Postal
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.postalCode}
-                    onChange={(e) =>
-                      setFormData({ ...formData, postalCode: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    required
-                  />
-                </div>
-
-                <div className="col-span-full space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    URL de Google Maps
-                  </label>
-                  <input
-                    type="url"
-                    value={googleMapsUrl}
-                    onChange={handleGoogleMapsUrlChange}
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    placeholder="https://maps.google.com/..."
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Latitud
-                  </label>
-                  <input
-                    type="number"
-                    step="any"
-                    value={formData.latitude}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        latitude: parseFloat(e.target.value),
-                      })
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Longitud
-                  </label>
-                  <input
-                    type="number"
-                    step="any"
-                    value={formData.longitude}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        longitude: parseFloat(e.target.value),
-                      })
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Paso 3: Contacto */}
-          {currentStep === 2 && (
-            <div className="space-y-4 transition-all duration-300">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Teléfono
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.phone ?? ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.email ?? ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Sitio Web
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.website ?? ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, website: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Horario
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.schedule ?? ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, schedule: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
-                    placeholder="Ej: Lunes a Viernes 9:00-18:00"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Paso 4: Items Aceptados */}
-          {currentStep === 3 && (
-            <div className="space-y-4 transition-all duration-300">
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                {Object.entries(ACCEPTED_ITEMS).map(([value, label]) => (
-                  <label
-                    key={value}
-                    className="group relative flex cursor-pointer items-center rounded-lg border border-gray-200 p-4 hover:bg-teal-50"
-                  >
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Paso 1: Información Básica */}
+            {currentStep === 0 && (
+              <div className="space-y-4 transition-all duration-300">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Nombre del punto
+                    </label>
                     <input
-                      type="checkbox"
-                      checked={formData.acceptedItems.includes(value)}
-                      onChange={() => handleToggleItem(value)}
-                      className="peer hidden"
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      required
                     />
-                    <div className="absolute inset-0 rounded-lg border-2 transition-colors peer-checked:border-teal-500 peer-checked:bg-teal-50" />
-                    <span className="relative z-10 text-gray-700 peer-checked:text-teal-600">
-                      {label}
-                    </span>
-                  </label>
-                ))}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Descripción
+                    </label>
+                    <textarea
+                      value={formData.description ?? ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                      className="h-full w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
-
-          {/* Botones de navegación */}
-          <div className="flex justify-between pt-6">
-            <button
-              type="button"
-              onClick={prevStep}
-              className={`rounded-lg px-6 py-2 text-sm font-medium transition-colors ${
-                currentStep === 0
-                  ? "invisible"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              Anterior
-            </button>
-
-            {currentStep === FORM_STEPS.length - 1 ? (
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="rounded-lg bg-teal-500 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-600"
-              >
-                Guardar Localización
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleNextStep}
-                className="rounded-lg bg-teal-500 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-600"
-              >
-                Siguiente
-              </button>
             )}
-          </div>
-        </form>
+
+            {/* Paso 2: Ubicación */}
+            {currentStep === 1 && (
+              <div className="space-y-4 transition-all duration-300">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Comunidad Autónoma
+                    </label>
+                    <select
+                      value={selectedCommunity}
+                      onChange={(e) => setSelectedCommunity(e.target.value)}
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      required
+                    >
+                      <option value="">Selecciona Comunidad Autónoma</option>
+                      {communities.map((community) => (
+                        <option key={community.label} value={community.label}>
+                          {community.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Provincia
+                    </label>
+                    <select
+                      value={selectedProvince}
+                      onChange={(e) => setSelectedProvince(e.target.value)}
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      required
+                      disabled={!selectedCommunity}
+                    >
+                      <option value="">Selecciona Provincia</option>
+                      {provinces.map((province) => (
+                        <option key={province.label} value={province.label}>
+                          {province.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Municipio
+                    </label>
+                    <select
+                      value={formData.city}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          city: e.target.value,
+                        }))
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      required
+                      disabled={!selectedProvince}
+                    >
+                      <option value="">Selecciona Municipio</option>
+                      {towns.map((town) => (
+                        <option key={town.label} value={town.label}>
+                          {town.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Dirección
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.address}
+                      onChange={(e) =>
+                        setFormData({ ...formData, address: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Código Postal
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.postalCode}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          postalCode: e.target.value,
+                        })
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      required
+                    />
+                  </div>
+
+                  <div className="col-span-full space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      URL de Google Maps
+                    </label>
+                    <input
+                      type="url"
+                      value={googleMapsUrl}
+                      onChange={handleGoogleMapsUrlChange}
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      placeholder="https://maps.google.com/..."
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Latitud
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={formData.latitude}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          latitude: parseFloat(e.target.value),
+                        })
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Longitud
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      value={formData.longitude}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          longitude: parseFloat(e.target.value),
+                        })
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Paso 3: Contacto */}
+            {currentStep === 2 && (
+              <div className="space-y-4 transition-all duration-300">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Teléfono
+                    </label>
+                    <input
+                      type="tel"
+                      value={formData.phone ?? ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={formData.email ?? ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Sitio Web
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.website ?? ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, website: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Horario
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.schedule ?? ""}
+                      onChange={(e) =>
+                        setFormData({ ...formData, schedule: e.target.value })
+                      }
+                      className="w-full rounded-lg border border-gray-300 p-3 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-200"
+                      placeholder="Ej: Lunes a Viernes 9:00-18:00"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Paso 4: Items Aceptados */}
+            {currentStep === 3 && (
+              <div className="space-y-4 transition-all duration-300">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                  {Object.entries(ACCEPTED_ITEMS).map(([value, label]) => (
+                    <label
+                      key={value}
+                      className="group relative flex cursor-pointer items-center rounded-lg border border-gray-200 p-4 hover:bg-teal-50"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.acceptedItems.includes(value)}
+                        onChange={() => handleToggleItem(value)}
+                        className="peer hidden"
+                      />
+                      <div className="absolute inset-0 rounded-lg border-2 transition-colors peer-checked:border-teal-500 peer-checked:bg-teal-50" />
+                      <span className="relative z-10 text-gray-700 peer-checked:text-teal-600">
+                        {label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Botones de navegación */}
+            <div className="flex justify-between pt-6">
+              <button
+                type="button"
+                onClick={prevStep}
+                className={`rounded-lg px-6 py-2 text-sm font-medium transition-colors ${
+                  currentStep === 0
+                    ? "invisible"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                Anterior
+              </button>
+
+              {currentStep === FORM_STEPS.length - 1 ? (
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="rounded-lg bg-teal-500 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-600"
+                >
+                  Guardar Localización
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleNextStep}
+                  className="rounded-lg bg-teal-500 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-600"
+                >
+                  Siguiente
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

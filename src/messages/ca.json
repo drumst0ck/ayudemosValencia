@@ -55,5 +55,9 @@
   "common": {
     "loading": "Carregant...",
     "openSource": "Projecte Open Source"
+  },
+  "emergency": {
+    "title": "Has perdut el contacte amb algun familiar durant la DANA?",
+    "phone": "Crida al 900 365 112"
   }
 }

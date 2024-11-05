@@ -50,10 +50,13 @@ export default function HomePage() {
     void fetchLocations({});
   }, [fetchLocations]);
 
-  const handleFiltersChange = useCallback((newFilters: LocationFiltersType) => {
-    setFilters(newFilters);
-    void fetchLocations(newFilters);
-  }, [fetchLocations]);
+  const handleFiltersChange = useCallback(
+    (newFilters: LocationFiltersType) => {
+      setFilters(newFilters);
+      void fetchLocations(newFilters);
+    },
+    [fetchLocations],
+  );
 
   return (
     <main className="relative flex min-h-screen flex-col md:flex-row">
@@ -112,8 +115,8 @@ export default function HomePage() {
           </button>
         </div>
 
-        <LocationFilters 
-          onFiltersChange={handleFiltersChange} 
+        <LocationFilters
+          onFiltersChange={handleFiltersChange}
           onFilterApplied={() => setIsFilterOpen(false)}
         />
       </div>
