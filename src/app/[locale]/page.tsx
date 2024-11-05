@@ -62,26 +62,13 @@ export default function HomePage() {
     <main className="relative flex h-[100dvh] flex-col md:flex-row">
       <WelcomePopup />
 
-      {/* Botón de filtros móvil - Ajustado z-index y posición */}
+      {/* Reemplazamos el botón de hamburguesa por un botón que dice MENU */}
       <button
         onClick={() => setIsFilterOpen(!isFilterOpen)}
-        className="fixed left-4 top-4 z-[1000] rounded-lg bg-white p-2 shadow-lg md:hidden"
+        className="fixed left-4 top-4 z-[1000] rounded-lg bg-white px-4 py-2 shadow-lg md:hidden font-medium text-gray-700"
         aria-label="Abrir filtros"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="h-6 w-6 text-gray-700"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-          />
-        </svg>
+        MENU
       </button>
 
       {/* Panel de filtros - Ajustado para manejar scroll interno */}
