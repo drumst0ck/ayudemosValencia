@@ -79,6 +79,79 @@ const FORM_STEPS = [
   },
 ] as const;
 
+function InstructionsModal({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
+        <h2 className="mb-4 text-xl font-bold text-gray-800">
+          Instrucciones para añadir un punto de recogida
+        </h2>
+
+        <div className="space-y-4 text-gray-600">
+          <section>
+            <h3 className="font-semibold text-gray-700">
+              1. Información Básica
+            </h3>
+            <p>
+              • Nombre: Identifica el punto de recogida (ej: "Parroquia San
+              Juan")
+            </p>
+            <p>• Descripción: Detalles adicionales sobre el punto (opcional)</p>
+          </section>
+
+          <section>
+            <h3 className="font-semibold text-gray-700">2. Ubicación</h3>
+            <p>• Selecciona la Comunidad Autónoma, Provincia y Municipio</p>
+            <p>• Introduce la dirección completa y código postal</p>
+            <p className="font-medium text-teal-600">
+              Tip para las coordenadas:
+            </p>
+            <ul className="ml-4 list-disc">
+              <li>Busca la ubicación en Google Maps</li>
+              <li>Copia la URL desde la barra de direcciones</li>
+              <li>Pégala en el campo "URL de Google Maps"</li>
+              <li>¡Las coordenadas se rellenarán automáticamente!</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3 className="font-semibold text-gray-700">
+              3. Contacto (Opcional)
+            </h3>
+            <p>• Teléfono: Número de contacto</p>
+            <p>• Email: Correo electrónico</p>
+            <p>• Web: Página web si existe</p>
+            <p>• Horario: Ej: "Lunes a Viernes 9:00-18:00"</p>
+          </section>
+
+          <section>
+            <h3 className="font-semibold text-gray-700">4. Items Aceptados</h3>
+            <p>
+              • Selecciona al menos un tipo de item que se acepta en el punto
+            </p>
+            <p>• Puedes seleccionar múltiples opciones</p>
+          </section>
+        </div>
+
+        <button
+          onClick={onClose}
+          className="mt-6 w-full rounded-lg bg-teal-500 py-2 text-white hover:bg-teal-600"
+        >
+          Entendido
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function LocationForm() {
   const [communities] = useState<Community[]>(territoriesData as Community[]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
@@ -109,11 +182,13 @@ export function LocationForm() {
 
   const [currentStep, setCurrentStep] = useState(0);
 
+  const [showInstructions, setShowInstructions] = useState(false);
+
   // Agregar esta función para validar cada paso
   const validateStep = (step: number) => {
     switch (step) {
       case 0:
-        return !!(formData.name);
+        return !!formData.name;
       case 1:
         return !!(
           formData.address &&
@@ -385,6 +460,31 @@ export function LocationForm() {
   return (
     <div className="p-6">
       <div className="mx-auto max-w-4xl rounded-xl bg-white/80 p-6 shadow-xl backdrop-blur">
+        {/* Agregar el botón de ayuda */}
+        <button
+          onClick={() => setShowInstructions(true)}
+          className="mb-4 flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm text-gray-600 hover:bg-gray-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <circle cx="12" cy="12" r="10" strokeWidth="2" />
+            <path d="M12 16v-4" strokeWidth="2" />
+            <path d="M12 8h.01" strokeWidth="2" />
+          </svg>
+          Ver instrucciones
+        </button>
+
+        {/* Agregar el modal */}
+        <InstructionsModal
+          isOpen={showInstructions}
+          onClose={() => setShowInstructions(false)}
+        />
+
         {/* Indicador de progreso */}
         <div className="mb-8">
           <div className="relative mx-auto max-w-2xl">
