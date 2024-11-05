@@ -462,7 +462,7 @@ export function LocationForm() {
       <div className="mx-auto max-w-4xl rounded-xl bg-white/80 p-6 shadow-xl backdrop-blur">
         <div className="mx-auto max-w-4xl">
           <div className="mx-auto max-w-2xl">
-            <div className="flex items-center justify-between">
+            <div className="relative flex items-center justify-between">
               {/* Líneas de fondo */}
               <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 bg-gray-300" />
 
