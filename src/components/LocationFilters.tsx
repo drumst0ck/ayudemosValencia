@@ -19,9 +19,7 @@ import { locales } from "@/i18n";
 import Link from "next/link";
 
 // Función para generar IDs únicos
-const generateUniqueId = () => {
-  return Math.random().toString(36).substring(2) + Date.now().toString(36);
-};
+
 
 type LocationFiltersProps = {
   onFiltersChange: (filters: LocationFilters) => void;
@@ -132,11 +130,11 @@ export function LocationFilters({
   return (
     <div className="flex h-[100dvh] flex-col md:h-full">
       <div className="flex-1 overflow-y-auto">
-        <div className="space-y-6 p-6">
+        <div className="space-y-3 p-4">
           {/* Banner de Emergencia */}
           <div className="rounded-lg bg-red-600 p-4 text-white shadow-lg">
             <div className="flex flex-col items-center gap-2 text-center">
-              <p className="font-medium">{t("emergency.title")}</p>
+              <p className="font-medium text-sm">{t("emergency.title")}</p>
               <a
                 href="tel:900365112"
                 className="text-xl font-bold hover:underline"
@@ -295,7 +293,7 @@ export function LocationFilters({
         </div>
       </div>
 
-      <div className="border-t border-gray-200 p-4">
+      <div className="border-t border-gray-200 pb-12 md:pb-4 p-4">
         <a
           href="https://github.com/drumst0ck/ayudemosValencia"
           target="_blank"

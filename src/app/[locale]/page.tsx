@@ -91,8 +91,7 @@ export default function HomePage() {
         }`}
       >
         {/* Título y botón cerrar */}
-        <div className="mb-6 flex items-center justify-between md:hidden">
-          <h2 className="text-xl font-semibold">Filtros</h2>
+        <div className="mb-1 flex items-center w-full justify-end md:hidden">
           <button
             onClick={() => setIsFilterOpen(false)}
             className="text-gray-500 hover:text-gray-700"
