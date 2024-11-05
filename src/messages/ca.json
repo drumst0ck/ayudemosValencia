@@ -34,6 +34,11 @@
         "TOOLS": "Ferramentes",
         "OTHER": "Altres"
       }
+    },
+    "addLocation": {
+      "title": "Coneixes un punt de recollida?",
+      "description": "Ajuda a la comunitat afegint nous punts de recollida. Si us plau, verifica la informació abans de publicar-la.",
+      "button": "Afegir punt de recollida"
     }
   },
   "location": {

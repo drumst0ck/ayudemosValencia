@@ -4,10 +4,19 @@ import { useState, useEffect } from "react";
 import { type Community, type LocationFilters } from "@/types/locations";
 import territoriesData from "@/arbol.json";
 import { ACCEPTED_ITEMS } from "@/constants/items";
-import { MapPin, Building2, Building, Package, Languages, Globe2 } from "lucide-react";
+import {
+  MapPin,
+  Building2,
+  Building,
+  Package,
+  Languages,
+  Globe2,
+  Plus,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import { locales } from "@/i18n";
+import Link from "next/link";
 
 // Función para generar IDs únicos
 const generateUniqueId = () => {
@@ -19,7 +28,10 @@ type LocationFiltersProps = {
   onFilterApplied?: () => void;
 };
 
-export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFiltersProps) {
+export function LocationFilters({
+  onFiltersChange,
+  onFilterApplied,
+}: LocationFiltersProps) {
   const [communities] = useState<Community[]>(territoriesData as Community[]);
   const [selectedCommunity, setSelectedCommunity] = useState<string>("");
   const [provinces, setProvinces] = useState([] as Community["provinces"]);
@@ -113,7 +125,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
   };
 
   const handleLanguageChange = (newLocale: string) => {
-    const currentPath = pathname.split('/').slice(2).join('/');
+    const currentPath = pathname.split("/").slice(2).join("/");
     router.push(`/${newLocale}/${currentPath}`);
   };
 
@@ -135,7 +147,7 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
                 className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
-                  pathname.split('/')[1] === lang.code
+                  pathname.split("/")[1] === lang.code
                     ? "bg-teal-100 text-teal-700"
                     : "bg-gray-50 text-gray-600 hover:bg-gray-100"
                 }`}
@@ -147,11 +159,37 @@ export function LocationFilters({ onFiltersChange, onFilterApplied }: LocationFi
           </div>
         </div>
 
+        {/* Nuevo botón de añadir localización */}
+        <div className="rounded-lg border border-teal-100 bg-teal-50 p-4">
+          <div className="mb-3 flex items-start gap-3">
+            <div className="rounded-full bg-teal-100 p-2">
+              <Plus className="h-5 w-5 text-teal-600" />
+            </div>
+            <div>
+              <h4 className="font-medium text-teal-900">
+                {t("filters.addLocation.title") ??
+                  "¿Conoces un punto de recogida?"}
+              </h4>
+              <p className="mt-1 text-sm text-teal-700">
+                {t("filters.addLocation.description") ??
+                  "Ayuda a la comunidad añadiendo nuevos puntos de recogida. Por favor, verifica la información antes de publicarla."}
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/admin"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-700"
+          >
+            <Plus className="h-4 w-4" />
+            {t("filters.addLocation.button") ?? "Añadir punto de recogida"}
+          </Link>
+        </div>
+
         <div className="space-y-4">
           <h3 className="text-xl font-semibold text-gray-800">
             {t("filters.title")}
           </h3>
-          
+
           <div className="space-y-4">
             {/* Comunidad Autónoma */}
             <div className="space-y-2">
