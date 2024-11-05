@@ -28,4 +28,9 @@ Mapa interactivo que muestra todos los puntos de recogida de donaciones para ayu
 
 ```bash
 git clone
+pnpm i
+pnpm db:generate
+pnpm db:migrate
+pnpm db:push
+pnpm dev
 ```
