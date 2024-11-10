@@ -25,6 +25,7 @@ Mapa interactivo que muestra todos los puntos de recogida de donaciones para ayu
 ## 🏗️ Instalación
 
 1. Clona el repositorio:
+2. Crea un archivo .env con la url de tu postgreSQL
 
 ```bash
 git clone
